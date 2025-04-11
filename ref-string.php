@@ -1,6 +1,10 @@
 <?php
 
-function readableSum(int|float|null $number, string $cur = 'рублей'): string {
+// TODO: а что дробные???????
+// TODO: попросить у чата ещё EC + чтоб он мне тест кейсы написал
+// TODO: EC когда оч больше число, больше квадрлн
+// TODO: bool для тысяч -> по идее можно просто readableSum($num * 1000);
+function readableSum(int|float|null $number, string $cur = 'рублей', string $fracCur = 'копеек'): string {
   if ($number === null) return 0 . " $cur";
 
   $wasNegative = false;
@@ -10,16 +14,47 @@ function readableSum(int|float|null $number, string $cur = 'рублей'): stri
   }
 
   // Разрядность (place of number of digits): в данном случае берём 1*000* (тысячу), т.е. 3 цифры. Константа
-  $NUM_OF_DIGITS = 3; // (
-  $NUM_OF_DIGITS_PER_PLACE = [
+  $NUM_OF_DIGITS_PER_TITLE = [
     3 => 'тыс.',
     6 => 'млн',
     9 => 'млрд',
     12 => 'трлн',
     15 => 'квадрлн'
   ];
+
+  $outputString = "$cur";
+  // TODO: с дробными разобраться заранее
+
+  foreach ($NUM_OF_DIGITS_PER_TITLE as $numOfDigits => $title) {
+    $numOfDigitsVal = 10 ** $numOfDigits; // 1_000, 1_000_000, 1_000_000_000, ...
+    var_dump($numOfDigitsVal);
+    if ($number >= $numOfDigitsVal) {
+      // process...
+      $numberFractionedMain = intdiv($number, $numOfDigitsVal);
+      $numberFractionedRemainder = $number % $numOfDigitsVal;
+      // var_dump($numberFractionedRemainder);
+      // die();
+      $outputString = "$numberFractionedMain $title $numberFractionedRemainder $outputString";
+      // var_dump($outputString);
+      // die();
+    } else {
+      $outputString = $number . $outputString; // TODO: не уверен тут. Типа это уже другая категория числа как будто
+      break;
+    }
+  }
+
+  die();
+
+  return $outputString;
 }
 
 $sum0 = null;
 
-echo readableSum(null) . PHP_EOL;
+// echo readableSum(null) . PHP_EOL;
+// echo readableSum(1_000) . PHP_EOL; // TODO: check
+echo readableSum(1_213) . PHP_EOL;
+// echo readableSum(1_213_213) . PHP_EOL;
+
+// echo readableSum(10_213) . PHP_EOL;
+// echo readableSum(100_213) . PHP_EOL;
+// echo readableSum(1_000_213) . PHP_EOL;
