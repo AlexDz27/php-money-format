@@ -29,17 +29,10 @@ function readableSum(int|float|null $number, string $cur = 'рублей', strin
     $numOfDigitsVal = 10 ** $numOfDigits; // 1_000, 1_000_000, 1_000_000_000, ...
     if ($number >= $numOfDigitsVal) {
       $numberFractionedMain = intdiv($number, $numOfDigitsVal);
-      $numberFractionedMain2 = null;
-      $numberFractionedMain2Str = "";
-      if ($numberFractionedMain >= $numOfDigitsVal) { // TODO: EC when zeros to check >*=*
-        $numberFractionedMain2 = intdiv($numberFractionedMain, $numOfDigitsVal);
-        $numberFractionedMain2Str = "$numberFractionedMain2 млн";
-        $numberFractionedMain = $numberFractionedMain % $numOfDigitsVal;
-      }
 
       $numberFractionedRemainder = $number % $numOfDigitsVal;
       
-      $outputString = "$numberFractionedMain2Str $numberFractionedMain $title $numberFractionedRemainder $outputString";
+      $outputString = "$numberFractionedMain $title $numberFractionedRemainder $outputString";
       // var_dump($outputString);
       // die();
     } else {
@@ -53,8 +46,10 @@ function readableSum(int|float|null $number, string $cur = 'рублей', strin
 $sum0 = null;
 
 // echo readableSum(null) . PHP_EOL;
+// echo readableSum(123) . PHP_EOL; // TODO: mb with current arch it IS an EC
 // echo readableSum(1_000) . PHP_EOL; // TODO: check (LOOKS LIKE EC)
 // echo readableSum(1_213) . PHP_EOL;
+// echo readableSum(99_999) . PHP_EOL;
 echo readableSum(1_213_213) . PHP_EOL;
 
 // echo readableSum(10_213) . PHP_EOL;
