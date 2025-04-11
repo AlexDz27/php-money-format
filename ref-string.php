@@ -27,23 +27,25 @@ function readableSum(int|float|null $number, string $cur = 'рублей', strin
 
   foreach ($NUM_OF_DIGITS_PER_TITLE as $numOfDigits => $title) {
     $numOfDigitsVal = 10 ** $numOfDigits; // 1_000, 1_000_000, 1_000_000_000, ...
-    var_dump($numOfDigitsVal);
     if ($number >= $numOfDigitsVal) {
-      // process...
       $numberFractionedMain = intdiv($number, $numOfDigitsVal);
+      $numberFractionedMain2 = null;
+      $numberFractionedMain2Str = "";
+      if ($numberFractionedMain >= $numOfDigitsVal) { // TODO: EC when zeros to check >*=*
+        $numberFractionedMain2 = intdiv($numberFractionedMain, $numOfDigitsVal);
+        $numberFractionedMain2Str = "$numberFractionedMain2 млн";
+        $numberFractionedMain = $numberFractionedMain % $numOfDigitsVal;
+      }
+
       $numberFractionedRemainder = $number % $numOfDigitsVal;
-      // var_dump($numberFractionedRemainder);
-      // die();
-      $outputString = "$numberFractionedMain $title $numberFractionedRemainder $outputString";
+      
+      $outputString = "$numberFractionedMain2Str $numberFractionedMain $title $numberFractionedRemainder $outputString";
       // var_dump($outputString);
       // die();
     } else {
-      $outputString = $number . $outputString; // TODO: не уверен тут. Типа это уже другая категория числа как будто
       break;
     }
   }
-
-  die();
 
   return $outputString;
 }
@@ -51,9 +53,9 @@ function readableSum(int|float|null $number, string $cur = 'рублей', strin
 $sum0 = null;
 
 // echo readableSum(null) . PHP_EOL;
-// echo readableSum(1_000) . PHP_EOL; // TODO: check
-echo readableSum(1_213) . PHP_EOL;
-// echo readableSum(1_213_213) . PHP_EOL;
+// echo readableSum(1_000) . PHP_EOL; // TODO: check (LOOKS LIKE EC)
+// echo readableSum(1_213) . PHP_EOL;
+echo readableSum(1_213_213) . PHP_EOL;
 
 // echo readableSum(10_213) . PHP_EOL;
 // echo readableSum(100_213) . PHP_EOL;
