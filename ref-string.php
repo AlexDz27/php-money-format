@@ -25,16 +25,44 @@ function readableSum(int|float|null $number, string $cur = 'рублей', strin
   $outputString = "$cur";
   // TODO: с дробными разобраться заранее
 
-  foreach ($NUM_OF_DIGITS_PER_TITLE as $numOfDigits => $title) {
+  // foreach ($NUM_OF_DIGITS_PER_TITLE as $numOfDigits => $title) {
+  //   $numOfDigitsVal = 10 ** $numOfDigits; // 1_000, 1_000_000, 1_000_000_000, ...
+  //   if ($number >= $numOfDigitsVal) {
+  //     $numberFractionedMain = intdiv($number, $numOfDigitsVal);
+
+  //     $numberFractionedRemainder = $number % $numOfDigitsVal;
+      
+  //     $outputString = "$numberFractionedMain $title $numberFractionedRemainder $outputString";
+  //     // var_dump($outputString);
+  //     // die();
+  //   } else {
+  //     break;
+  //   }
+  // }
+
+  for ($i = 3; $i <= count($NUM_OF_DIGITS_PER_TITLE) * 3; $i += 3) {
+    $numOfDigits = $i;
+    $title = $NUM_OF_DIGITS_PER_TITLE[$i];
+
     $numOfDigitsVal = 10 ** $numOfDigits; // 1_000, 1_000_000, 1_000_000_000, ...
     if ($number >= $numOfDigitsVal) {
       $numberFractionedMain = intdiv($number, $numOfDigitsVal);
 
+      $wasMain2 = false;
+      $numberFractionedMain2 = null;
+      $numberFractionedMain2Str = "";
+      if ($numberFractionedMain >= $numOfDigitsVal) { // блять, а тут типа рекурсия походу..  TODO: EC when zeros to check >*=*
+        $wasMain2 = true;
+        $numberFractionedMain2 = intdiv($numberFractionedMain, $numOfDigitsVal);
+        $numberFractionedMain2Str = "$numberFractionedMain2 млн";
+        $numberFractionedMain = $numberFractionedMain % $numOfDigitsVal;
+      }
+
       $numberFractionedRemainder = $number % $numOfDigitsVal;
       
-      $outputString = "$numberFractionedMain $title $numberFractionedRemainder $outputString";
-      // var_dump($outputString);
-      // die();
+      $outputString = "$numberFractionedMain2Str $numberFractionedMain $title $numberFractionedRemainder $outputString";
+      
+      if ($wasMain2) break;
     } else {
       break;
     }
