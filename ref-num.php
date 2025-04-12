@@ -27,11 +27,6 @@ function readableSum(int|float|null $number, string $cur = 'рублей', strin
       $remainder = $number % 1_000;
 
       $outputString = "$quotient тыс. $remainder $outputString";
-    } else if ($number > 1_000_000) {
-      $quotient = intdiv($number, 1_000_000);
-      $remainder = $number % 1_000;
-
-      $outputString = "$quotient тыс. $remainder $outputString";
     }
   };
 
