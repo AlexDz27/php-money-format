@@ -1,8 +1,7 @@
 <?php
 
-// TODO: :string stuff
-function readableSum($number, $cur = 'рублей', $fracCur = 'копеек') {
-  if ($number == 0) return "0 $cur"; // checking with == for 0 and null
+function readableSum(int|float|null $number, string $cur = 'рублей', string $fracCur = 'копеек'): string {
+  if ($number == 0) return "0 $cur"; // checking with == for 0, 0.0, and null
   $wasNegative = false;
   if ($number < 0) {
     $wasNegative = true;
