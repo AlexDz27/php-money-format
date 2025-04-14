@@ -19,27 +19,41 @@ function readableSum(int|float|null $number, string $cur = 'рублей', strin
   ];
 
   $outputString = "$cur";
-  $readableSumFraction = function() use ($number, &$outputString) {
-    if ($number < 1_000) {
-      $outputString = "$number $outputString";
-    } else if ($number > 1_000) {
-      $quotient = intdiv($number, 1_000);
-      $remainder = $number % 1_000;
 
-      $outputString = "$quotient тыс. $remainder $outputString";
+  $placeValuePerTitle = [
+    'тыс.' => null,
+    'млн' => null,
+    'млрд' => null,
+    'трлн' => null,
+    'квадрлн' => null
+  ];
+  if ($number < 1_000) {
+    $outputStringPart = "$number";
+  } else {
+    for ($i = 3; $i <= count($NUM_OF_DIGITS_PER_TITLE) * 3; $i += 3) {
+      $numOfDigits = $i;
+      $title = $NUM_OF_DIGITS_PER_TITLE[$i];
+
+      $numOfDigitsVal = 10 ** $numOfDigits;
+      $placeValuePerTitle['тыс.'] = intdiv($number, 10 ** $numOfDigits);
+      if ($placeValuePerTitle['тыс.'] >= 10 ** $numOfDigits) {
+        // foreach ($placeValuePerTitle as $key => $value) {
+
+        // }
+      } else {
+        break;
+      }
     }
-  };
+  }
 
-  $readableSumFraction();
-
-  return $outputString;
+  return "$outputStringPart $outputString";
 }
 
 // echo readableSum(213) . PHP_EOL;
 // echo readableSum(1) . PHP_EOL;
 // echo readableSum(0) . PHP_EOL;
 echo readableSum(1_001) . PHP_EOL;
-// echo readableSum(1_000) . PHP_EOL;
+// echo readableSum(1_000) . PHP_EOL; // TODO: CHECK NOW HERE
 
 // echo readableSum(1_231) . PHP_EOL;
 
